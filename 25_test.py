@@ -17,6 +17,7 @@ for j in range(d_count):
     neigh2 = nodes[(j+1) % n_count]
     devices[j].position_device({neigh1, neigh2})
 # associa dispositivi ai nodi
+print(devices[0].ranked_nodes)
 match = mg.stable_marriage(nodes, devices)
 print(devices[0].ranked_nodes)
 ##stampa ogni coppia nodo-dispositivo
