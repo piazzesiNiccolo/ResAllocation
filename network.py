@@ -8,11 +8,13 @@ class Device:
         self.ranked_nodes = []
         self.matched = False
 
-    def propose_to(self, node):
-        node.proposals.append(self)
+    def propose(self):
+        """ si propone al nodo preferito"""
+        self.ranked_nodes[0].proposals.append(self)
 
     def position_device(self, neighbors):
-        # classifica i nodi in base alla distanza utilizzando visita in ampiezza
+        """ classifica i nodi in base alla distanza utilizzando visita in ampiezza,
+        partendo dai vicin """
         self.ranked_nodes = list(neighbors)
         q = queue.deque(neighbors)
         while q:
@@ -32,30 +34,36 @@ class Node:
         self.name = name
         self.proposals = []
         self.neighbors = set()
-        self.matched = False
         self.device = None
 
     def add_neighbor(self, n):
         if n not in self.neighbors and self not in n.neighbors:
             self.neighbors.add(n)
             n.neighbors.add(self)
+    
+    def remove_neighbor(self, n):
+        if n in self.neighbors and self in n.neighbors:
+            self.neighbors.remove(n)
+            n.neighbors.remove(self)
 
     def choose_device(self):
-        # associa al nodo il dispositivo che si è proposto con priorità massima
+        """associa al nodo il dispositivo  con priorità massima tra le proposte """
         dev = max(self.proposals, key=lambda x: x.priority)
-
+        
+        #sceglie il dispositivo
         if self.device == None:
             self.device = dev
         elif dev.priority > self.device.priority:
             self.device.matched = False
             self.device = dev
         self.device.matched = True
-        ##
+       
+        #rigetta le altre proposte
         if len(self.proposals) > 0:
             for p in self.proposals:
                 p.ranked_nodes.remove(self)
             self.proposals.clear()
-        self.matched = True
+        
 
     def __repr__(self):
         return str(self.name)
@@ -79,6 +87,7 @@ class Network(object):
     def remove_edge(self, edge):
         if edge in self.edges:
             self.edges.remove(edge)
+            edge[0].remove_neighbor(edge[1])
 
     def get_edges(self):
         return self.edges
