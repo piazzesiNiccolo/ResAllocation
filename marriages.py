@@ -1,7 +1,7 @@
 import copy
 
 def stable_marriage(nodes = [], devices = []):
-    """ forma le associazioni sotto forma di tuple(nodo, dispositivo)"""
+    """ forma le associazioni e le restituisce sotto forma di tuple (nodo, dispositivo)"""
     if len(nodes) != len(devices):
         raise ValueError('Deve esserci lo stesso numero di nodi e dispositivi!')
     #copia le liste dei nodi di ciascun dispositivo,in modo da evitare side effects
@@ -19,7 +19,7 @@ def stable_marriage(nodes = [], devices = []):
             if len(node.proposals) != 0:
                 node.choose_device()
     
-    #ripristina le liste di nodi
+    #ripristina le liste dei nodi di ciascun dispositivo
     for i in range(len(devices)):
         devices[i].ranked_nodes = copy_nodes[i]
     return list((node, node.device) for node in nodes)

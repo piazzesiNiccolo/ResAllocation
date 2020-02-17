@@ -8,7 +8,13 @@ n_count = len(nodes)
 #crea i dispositivi
 devices = utils.create_n_devices_with_random_priority(25)
 d_count = len(devices)
+print('nodi della rete:')
+for node in nodes:
+    print(node)
 
+print('\n\ndispositivi della rete:')
+for dev in devices:
+    print(dev)
 # crea rete con topologia ad anello
 nx = Network(nodes)
 for i in range(len(nodes)):
@@ -25,5 +31,6 @@ for j in range(d_count):
 match = mg.stable_marriage(nodes, devices)
 
 ##stampa ogni coppia nodo-dispositivo
+print('\n\nAssociazioni create:')
 for node, device in match:
     print('['+str(node) + ', '+str(device)+']')

@@ -10,11 +10,12 @@ class Device:
 
     def propose(self):
         """ si propone al nodo preferito"""
-        self.ranked_nodes[0].proposals.append(self)
+        n = self.ranked_nodes.pop(0)
+        n.proposals.append(self)
 
     def position_device(self, neighbors):
         """ classifica i nodi in base alla distanza utilizzando visita in ampiezza,
-        partendo dai vicin """
+        partendo dai vicini"""
         self.ranked_nodes = list(neighbors)
         q = queue.deque(neighbors)
         while q:
@@ -49,7 +50,7 @@ class Node:
     def choose_device(self):
         """associa al nodo il dispositivo  con priorità massima tra le proposte """
         dev = max(self.proposals, key=lambda x: x.priority)
-        
+        self.proposals.remove(dev)
         #sceglie il dispositivo
         if self.device == None:
             self.device = dev
@@ -57,19 +58,16 @@ class Node:
             self.device.matched = False
             self.device = dev
         self.device.matched = True
-       
-        #rigetta le altre proposte
+        #rigetta, se presenti, le altre proposte
         if len(self.proposals) > 0:
-            for p in self.proposals:
-                p.ranked_nodes.remove(self)
-            self.proposals.clear()
+           self.proposals.clear()
         
 
     def __repr__(self):
         return str(self.name)
 
 
-class Network(object):
+class Network:
     def __init__(self, nodes):
         self.nodes = nodes
         self.edges = set()
