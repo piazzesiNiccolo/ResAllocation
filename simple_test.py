@@ -9,7 +9,7 @@ d = Node('d')
 e = Node('e')
 #crea dispositivi
 d1 = Device('1',6)
-d2 = Device('2',6)
+d2 = Device('2',3)
 d3 = Device('3',7)
 d4 = Device('4',8)
 d5 = Device('5',2)
